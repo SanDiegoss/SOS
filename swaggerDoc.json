@@ -1,0 +1,397 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Метрики API",
+    "description": "Сервис для получения и логгирования метрик.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "metricsmonitor.com",
+      "description": "Сервис для мониторинга метрик"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Metric": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "MetricDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "observerId": {
+            "type": "integer"
+          },
+          "ruleId": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "email",
+              "telegram"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-01-30T08:30:00Z"
+          }
+        }
+      },
+      "NotificationDTO": {
+        "type": "object",
+        "properties": {
+          "observerId": {
+            "type": "integer"
+          },
+          "ruleId": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "email",
+              "telegram"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-01-30T08:30:00Z"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/metrics": {
+      "get": {
+        "summary": "Получение всех метрик",
+        "responses": {
+          "200": {
+            "description": "Успешное получение метрик",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Metric"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Создание новой метрики",
+        "requestBody": {
+          "description": "Информация для создания метрики",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MetricDTO"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Метрика была добавлена"
+          }
+        }
+      }
+    },
+    "/api/metrics/{id}": {
+      "get": {
+        "summary": "Получение метрики по ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID метрики"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное получение метрики",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metric"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Метрика не найдена"
+          }
+        }
+      },
+      "put": {
+        "summary": "Обновление метрики по ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID метрики"
+          }
+        ],
+        "requestBody": {
+          "description": "Измененные данные для метрики",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metric"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Метрика обновлена"
+          },
+          "404": {
+            "description": "Метрика не найдена"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаление метрики по ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Идентификатор метрики"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Метрика удалена"
+          },
+          "404": {
+            "description": "Метрика не найдена"
+          }
+        }
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "summary": "Получение всех оповещений",
+        "responses": {
+          "200": {
+            "description": "Успешное получение оповещений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Создание нового оповещения",
+        "requestBody": {
+          "description": "Информация для создания оповещения",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NotificationDTO"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Оповещение было добавлено"
+          }
+        }
+      }
+    },
+    "/api/notifications/{id}": {
+      "get": {
+        "summary": "Получение оповещения по ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID оповещения"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное получение оповещения",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Оповещение не найдена"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаление оповещения по ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Идентификатор оповещения"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Оповещение удалена"
+          },
+          "404": {
+            "description": "Оповещение не найдена"
+          }
+        }
+      }
+    },
+    "/api/notifications/byObserverId": {
+      "get": {
+        "summary": "Получение оповещения по ID наблюдателя",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID наблюдателя"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное получение оповещений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Оповещения не найдены"
+          }
+        }
+      }
+    },
+    "/api/notifications/byRuleId": {
+      "get": {
+        "summary": "Получение оповещения по ID правила",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID правила"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное получение оповещений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Оповещения не найдены"
+          }
+        }
+      }
+    }
+  }
+}
