@@ -1,5 +1,5 @@
 module.exports = {
-	MetricsController: require("./MetricsController"),
-	NotificationsController: require("./NotificationsController"),
-	RulesController: require('./RulesController')
+  MetricsController: require('./MetricsController'),
+  NotificationsController: require('./NotificationsController'),
+  RulesController: require('./RulesController'),
 };
