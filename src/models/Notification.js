@@ -5,11 +5,11 @@ module.exports = mongoose.model(
   'Notification',
   new Schema({
     observerId: {
-      type: Number,
+      type: String,
       required: true,
     },
     ruleId: {
-      type: Number,
+      type: String,
       required: true,
     },
     message: {
@@ -17,7 +17,7 @@ module.exports = mongoose.model(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
     method: {
